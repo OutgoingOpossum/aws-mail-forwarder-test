@@ -33,9 +33,10 @@ type testMailAppResponse struct {
 
 type testMailAppEmailsResponse struct {
 	DownloadUrl string `json:"downloadUrl"`
+	Id          string `json:"id"`
 }
 
-func sendTestMail(t *testing.T, config testConfig) {
+func sendTestMail(t *testing.T, config testConfig, timestamp int64) {
 	from := "Sender <sender@aws-mail-forwarder.org>"
 	to := []string{"CI Test Forwarder <ci-test@aws-mail-forwarder.org>"}
 	cc := []string{}
@@ -51,7 +52,7 @@ func sendTestMail(t *testing.T, config testConfig) {
 		Content: &types.EmailContent{
 			Simple: &types.Message{
 				Subject: &types.Content{
-					Data: aws.String("Test subject"),
+					Data: aws.String(fmt.Sprintf("Test subject %d", timestamp)),
 				},
 				Body: &types.Body{
 					Text: &types.Content{
@@ -75,7 +76,8 @@ func sendTestMail(t *testing.T, config testConfig) {
 	}
 }
 
-func receiveTestMail(t *testing.T, config testConfig) *mail.Message {
+func receiveTestMail(t *testing.T, config testConfig, timestamp int64) *mail.Message {
+	// Wait for new mail to arrive
 	client := http.Client{
 		Timeout: 30 * time.Second,
 	}
@@ -85,7 +87,7 @@ func receiveTestMail(t *testing.T, config testConfig) *mail.Message {
 		config.testMailAppApiKey,
 		config.testMailAppNamespace,
 		config.testMailAppTag,
-		time.Now().UTC().UnixMilli()),
+		timestamp),
 	)
 	if err != nil {
 		t.Fatalf("Failed to receive test mail: %v", err)
@@ -124,8 +126,8 @@ func receiveTestMail(t *testing.T, config testConfig) *mail.Message {
 	return message
 }
 
-func validateMail(t *testing.T, config testConfig, mail *mail.Message) {
-	if expected, actual := "FORWARDER: Test subject", mail.Header.Get(message.SubjectKey); expected != actual {
+func validateMail(t *testing.T, config testConfig, mail *mail.Message, timestamp int64) {
+	if expected, actual := fmt.Sprintf("FORWARDER: Test subject %d", timestamp), mail.Header.Get(message.SubjectKey); expected != actual {
 		t.Errorf("expected %s, got %s", expected, actual)
 	}
 
@@ -179,9 +181,17 @@ func checkEnv(t *testing.T, envName string) {
 func TestForwarding(t *testing.T) {
 	testConfig := getTestConfig(t)
 
-	sendTestMail(t, testConfig)
+	timestamp := time.Now().UTC().UnixMilli()
 
-	message := receiveTestMail(t, testConfig)
+	t.Logf("Sending mail...")
+	sendTestMail(t, testConfig, timestamp)
+	t.Logf("Sending mail completed")
 
-	validateMail(t, testConfig, message)
+	t.Logf("Receiving mail...")
+	message := receiveTestMail(t, testConfig, timestamp)
+	t.Logf("Receiving mail completed")
+
+	t.Logf("Validating mail...")
+	validateMail(t, testConfig, message, timestamp)
+	t.Logf("Validating mail completed")
 }
