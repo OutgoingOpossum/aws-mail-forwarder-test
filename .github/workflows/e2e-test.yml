@@ -32,3 +32,9 @@ jobs:
         
       - name: Run e2e test
         run: go test -v -tags="e2e" ./e2e
+        env: # Or as an environment variable
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_PROFILE: ${{ secrets.AWS_PROFILE }}
+          TESTMAILAPP_APIKEY: ${{ secrets.TESTMAILAPP_APIKEY }}
+          TESTMAILAPP_NAMESPACE: ${{ secrets.TESTMAILAPP_NAMESPACE }}
+          TESTMAILAPP_TAG: ${{ secrets.TESTMAILAPP_TAG }}
