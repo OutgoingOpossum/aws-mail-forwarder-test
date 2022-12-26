@@ -37,8 +37,8 @@ type testMailAppEmailsResponse struct {
 }
 
 func sendTestMail(t *testing.T, config testConfig, timestamp int64) {
-	from := "Sender <sender@aws-mail-forwarder.org>"
-	to := []string{"CI Test Forwarder <ci-test@aws-mail-forwarder.org>"}
+	from := "e2e Test Sender <sender@e2e-test.aws-mail-forwarder.org>"
+	to := []string{"e2e Test Recipient <recipient@e2e-test.aws-mail-forwarder.org>"}
 	cc := []string{}
 	bcc := []string{}
 
@@ -135,11 +135,11 @@ func validateMail(t *testing.T, config testConfig, mail *mail.Message, timestamp
 		t.Errorf("expected %s, got %s", expected, actual)
 	}
 
-	if expected, actual := "\"Sender at sender@aws-mail-forwarder.org\" <ci-test@aws-mail-forwarder.org>", mail.Header.Get(message.FromKey); expected != actual {
+	if expected, actual := "\"e2e Test Sender at sender@e2e-test.aws-mail-forwarder.org\" <recipient@e2e-test.aws-mail-forwarder.org>", mail.Header.Get(message.FromKey); expected != actual {
 		t.Errorf("expected %s, got %s", expected, actual)
 	}
 
-	if expected, actual := "CI Test Forwarder <ci-test@aws-mail-forwarder.org>", mail.Header.Get(message.ToKey); expected != actual {
+	if expected, actual := "e2e Test Recipient <recipient@e2e-test.aws-mail-forwarder.org>", mail.Header.Get(message.ToKey); expected != actual {
 		t.Errorf("expected %s, got %s", expected, actual)
 	}
 }
