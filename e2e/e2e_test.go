@@ -107,8 +107,12 @@ func receiveTestMail(t *testing.T, config testConfig, timestamp int64) *mail.Mes
 		t.Fatalf("Failed to parse response: %v", err)
 	}
 
+	// Pick first mail
+	mailResponse := body.Emails[0]
+	t.Logf("Received mail with ID %s", mailResponse.Id)
+
 	// Download mail as EML file
-	resp, err = http.Get(body.Emails[0].DownloadUrl)
+	resp, err = http.Get(mailResponse.DownloadUrl)
 	if err != nil {
 		t.Fatalf("Failed to download mail: %v", err)
 	}
