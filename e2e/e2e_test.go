@@ -153,7 +153,6 @@ type testConfigAddresses struct {
 
 func getTestConfig(t *testing.T) testConfig {
 	checkEnv(t, "AWS_REGION")
-	checkEnv(t, "AWS_PROFILE")
 	checkEnv(t, "TESTMAILAPP_APIKEY")
 	checkEnv(t, "TESTMAILAPP_NAMESPACE")
 	checkEnv(t, "TESTMAILAPP_TAG")
