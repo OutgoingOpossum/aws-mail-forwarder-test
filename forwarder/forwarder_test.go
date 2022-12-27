@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/codezombiech/aws-mail-forwarder-test/config"
 	"github.com/codezombiech/aws-mail-forwarder-test/message"
-	"github.com/google/go-cmp/cmp"
 )
 
 func TestProcessMessageHeader(t *testing.T) {
@@ -62,84 +61,6 @@ func TestProcessMessageHeader(t *testing.T) {
 		if strings.HasSuffix(k, "Dkim-Signature") {
 			t.Errorf("found unexpected header %s", k)
 		}
-	}
-}
-
-func TestProcessMessageHeaderFromTo(t *testing.T) {
-	tests := map[string]struct {
-		from     string
-		to       []string
-		wantFrom []string
-		wantTo   []string
-	}{
-		"address only": {
-			from:     "sender@example.com",
-			to:       []string{"public-address@example.com"},
-			wantFrom: []string{"\"sender@example.com\" <public-address@example.com>"},
-			wantTo:   []string{"public-address@example.com"},
-		},
-		"name and address": {
-			from:     "\"John Doe\" <sender@example.com>",
-			to:       []string{"public-address@example.com"},
-			wantFrom: []string{"\"John Doe at sender@example.com\" <public-address@example.com>"},
-			wantTo:   []string{"public-address@example.com"},
-		},
-	}
-
-	config := parseConfig(t, config.RawConfig{
-		//FromEmail:     "forwarder@example.com",
-		SubjectPrefix: "",
-		AllowPlusSign: true,
-		ForwardMapping: map[string][]string{
-			"public-address@example.com": {
-				"private-address@example.com",
-			},
-		},
-	})
-
-	f := NewForwarder(config, aws.Config{})
-
-	for name, tc := range tests {
-		t.Run(name, func(t *testing.T) {
-			originalRecipientRaw := tc.to[0]
-			originalRecipient, err := mail.ParseAddress(originalRecipientRaw)
-			if err != nil {
-				t.Fatalf("Invalid address: %v, %v", originalRecipientRaw, err)
-			}
-
-			reader, err := os.Open("./testdata/text-plain-mail.mail")
-			if err != nil {
-				t.Fatal(err)
-			}
-			defer reader.Close()
-
-			mailMessage, err := mail.ReadMessage(reader)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			// Set headers
-			mailMessage.Header[message.FromKey] = []string{tc.from}
-			if tc.to != nil {
-				mailMessage.Header[message.ToKey] = tc.to
-			}
-
-			// Act
-			if err := f.processMessageHeader(mailMessage.Header, originalRecipient); err != nil {
-				t.Fatal(err)
-			}
-
-			var want, got []string
-			want, got = tc.wantFrom, mailMessage.Header[message.FromKey]
-			if diff := cmp.Diff(want, got); diff != "" {
-				t.Errorf("%s header (-want +got):\n%s", message.FromKey, diff)
-			}
-
-			want, got = tc.wantTo, mailMessage.Header[message.ToKey]
-			if diff := cmp.Diff(want, got); diff != "" {
-				t.Errorf("%s header (-want +got):\n%s", message.ToKey, diff)
-			}
-		})
 	}
 }
 
