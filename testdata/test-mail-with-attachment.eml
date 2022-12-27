@@ -1,0 +1,84 @@
+Return-Path: <01020184a0c4c1e1-890f65f5-cc29-4211-b68f-992b97693878-000000@eu-west-1.amazonses.com>
+Received: from a2-76.smtp-out.eu-west-1.amazonses.com (a2-76.smtp-out.eu-west-1.amazonses.com [54.240.2.76])
+ by inbound-smtp.eu-west-1.amazonaws.com with SMTP id efcs55cua2msk8mf7vgaktsnkt3ftkeu1mqia6o1;
+ Tue, 22 Nov 2022 19:16:00 +0000 (UTC)
+Received-SPF: pass (spfCheck: domain of eu-west-1.amazonses.com designates 54.240.2.76 as permitted sender) client-ip=54.240.2.76; envelope-from=01020184a0c4c1e1-890f65f5-cc29-4211-b68f-992b97693878-000000@eu-west-1.amazonses.com; helo=a2-76.smtp-out.eu-west-1.amazonses.com;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of eu-west-1.amazonses.com designates 54.240.2.76 as permitted sender) client-ip=54.240.2.76; envelope-from=01020184a0c4c1e1-890f65f5-cc29-4211-b68f-992b97693878-000000@eu-west-1.amazonses.com; helo=a2-76.smtp-out.eu-west-1.amazonses.com;
+ dkim=pass header.i=@amazonses.com;
+ dkim=pass header.i=@excited-emu.awsapps.com;
+ dmarc=pass header.from=excited-emu.awsapps.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFHb1FGQXpTdWRyQTdGZHF4cEtxOW1PZ1lJdHptNnl2TlVobTJQT3hCZ0FNVXVvZW5XMWxrVnVQcndpbmFub2F6MmwvRjVGdFFESmV5TVkxcVV3aUJ3L0RSMzd4MloxcEtLR3dQSW5XcSswOGR4QWd4M2NFd0NudGZCQmhZSGVWVk84akh3blozNzFiZkV1dnpnSmNuek1tZGtQYTBaZURDeTdzY0FhUURVUjZUcjZzbFFyVU0vb1hHbDlGazFGdlUyTWluS3N0dGpFRm1JQzZwRmV1d01iUndsSDYrWlMyZEJPRGNhMEd5YnNtYWJYYmc1TGlaVXh1eFhEVkxQYkpYYXpsMW1jWXlMYUdnL1I0Z0ovTUJpeFlYZXNva0twaFBuK0xuRlJBOFIveGVVN3FrbGFERFVGYnF2M2k2Z0ZiWW1EUUVvcElqWGhkUEpVNkd3MGRVK1IrSXVaSlRuVGJveWIxVnJiOHA2alJhMzRNOEJtbVk5QzFFSW14SUUvbWhNPQ==
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=f2pIQmy3y57b8pPsSDb9MdyHHBDYLn1yj6aBpCV1N8cCy2kva5d9S+5eAKMUeR8eDRRIJQzOcPIR9JflG8Gx1tKJrFSMCn4FFvowCpKqiGuwXJY+5I3A9T0uMY/JVuj+IXMwCYuI/6M0Fould0/D3AJDwZjNlVYkZUHnkP7zOlo=; c=relaxed/simple; s=ihchhvubuqgjsxyuhssfvqohv7z3u4hn; d=amazonses.com; t=1669144561; v=1; bh=VHKiB6Z/6y5PcMaJVbY5x4A0kvlzl8ASM0ker1qbjxY=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=o7bai5im5otrg6zk6gyjdrmo53gkx2er; d=excited-emu.awsapps.com;
+	t=1669144560;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:References:Message-Id;
+	bh=VHKiB6Z/6y5PcMaJVbY5x4A0kvlzl8ASM0ker1qbjxY=;
+	b=uu/yvrdoee2/dbB3ZKRVKQ+65cuJGQkN4bbQ0HGhzhEQSXMm/MXEuKybMcUxrq2U
+	lWkzi+CGh0K6AFGf6zRnZaHjkZ2w7D+inuxOz3Lnt8BkJeQfLUERP9NrgCSIZBTr9lo
+	g2G8JW53QefUxD33abqp6yDL+jzBsCTVD7MThcwxwqa0QF8x9DkLkjbnzQkZ6BCrkAu
+	W/Smg07IwhJsKgwjd6M6DqJ7R77hSeEnIA20Ulrd1+KlOnzwgBvDM4FRgiH8+UsFDVm
+	kAqcWWY4142ptUK15n7R1IJHmnrjslE9/AM49gtrqbuGi81Mce8R0PaON3kiqfz0KzF
+	iXaQEy8FGA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=ihchhvubuqgjsxyuhssfvqohv7z3u4hn; d=amazonses.com; t=1669144560;
+	h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:References:Message-Id:Feedback-ID;
+	bh=VHKiB6Z/6y5PcMaJVbY5x4A0kvlzl8ASM0ker1qbjxY=;
+	b=mDtS3zTGYh5csNN3KfWskpZuwldq4ZIRhI6kAswVOpXxEWkjxliNGVL/EGW03XPn
+	AsUAAtEsX9+c50ZnwEFNCt8unOQXVoBog6XrYxhsaQC5eqmTWoKUY6/mAFQ7H5ThY7N
+	bnLK30yTfJhZ42PkhwX5YrR5NgG0VNG023+5lC2c=
+Subject: Test mail with attachment
+From: =?UTF-8?Q?Sender?= <sender@excited-emu.awsapps.com>
+To: =?UTF-8?Q?To?= <to@excited-emu.awsapps.com>, =?UTF-8?Q?Donald_Duck?=
+  <donald.duck@excited-emu.awsapps.com>
+Cc: =?UTF-8?Q?CC?= <cc@excited-emu.awsapps.com>, =?UTF-8?Q?Dagobert_Duck?=
+  <dagobert.duck@excited-emu.awsapps.com>
+Date: Tue, 22 Nov 2022 19:16:00 +0000
+Mime-Version: 1.0
+Content-Type: multipart/mixed; 
+ boundary="=_L+hv39QKROP-jYEjCxOAb2kgJm6Zr3QftDKKHMWjeI3IzghZ"
+References: <7865887e-7d72-1b29-65f7-6556dd65778e@excited-emu.awsapps.com>
+X-Mailer: Amazon WorkMail
+Thread-Index: AQHY/qbZg6d5NMcUR8GPM4q6+wo/aA==
+Thread-Topic: Test mail with attachment
+X-Wm-Sent-Timestamp: 1669144558
+Message-ID: <01020184a0c4c1e1-890f65f5-cc29-4211-b68f-992b97693878-000000@eu-west-1.amazonses.com>
+Feedback-ID: 1.eu-west-1.b24dn6frgCi6dh20skzbuMRr7UL8M6Soir/3ogtEjHQ=:AmazonSES
+X-SES-Outgoing: 2022.11.22-54.240.2.76
+
+This is a multi-part message in MIME format. Your mail reader does not
+understand MIME message format.
+--=_L+hv39QKROP-jYEjCxOAb2kgJm6Zr3QftDKKHMWjeI3IzghZ
+Content-Type: multipart/alternative; 
+ boundary="=_L+hvqiyySFfqWzR4nkEd2AWmf9cJ92dgw9JexOpO7UwiiSKT"
+
+--=_L+hvqiyySFfqWzR4nkEd2AWmf9cJ92dgw9JexOpO7UwiiSKT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Message body
+
+ 
+--=_L+hvqiyySFfqWzR4nkEd2AWmf9cJ92dgw9JexOpO7UwiiSKT
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Message <b>body</b></p>
+  </body>
+</html>
+
+--=_L+hvqiyySFfqWzR4nkEd2AWmf9cJ92dgw9JexOpO7UwiiSKT--
+
+--=_L+hv39QKROP-jYEjCxOAb2kgJm6Zr3QftDKKHMWjeI3IzghZ
+Content-Type: text/plain; name=sample-file.txt
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=sample-file.txt
+
+U2FtcGxlIHRleHQ=
+--=_L+hv39QKROP-jYEjCxOAb2kgJm6Zr3QftDKKHMWjeI3IzghZ--
