@@ -44,8 +44,8 @@ jobs:
           zip lambda.zip -r .
           cd -
 
-      - name: Check for file
-        run: stat ${BUILD_DIR}lambda.zip
+      - name: Cat
+        run: cat "${BUILD_DIR}config.json"
 
       # - name: Run e2e test
       #   run: go test -v -tags="e2e" ./e2e
