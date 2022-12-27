@@ -12,23 +12,6 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  build:
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: Install dependencies
-        run: go get .
-      - name: Test with Go
-        run: go test -json > TestResults-${{ matrix.go-version }}.json
-      - name: Upload Go test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: Go-results-${{ matrix.go-version }}
-          path: TestResults-${{ matrix.go-version }}.json
-
   e2e-test:
     runs-on: ubuntu-latest
 
