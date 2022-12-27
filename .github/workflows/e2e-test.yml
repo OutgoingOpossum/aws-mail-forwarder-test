@@ -56,9 +56,9 @@ jobs:
           
       - name: Create lambda.zip archive
         run: |
-          cd ${BUILD_DIR} 
+          cd ${BUILD_DIR}
           if [ -f lambda.zip ]; then rm lambda.zip; fi
-		      zip lambda.zip -r . \
+		      zip lambda.zip -r .
 		      cd -
 
       - name: Check for file
