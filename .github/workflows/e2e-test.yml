@@ -1,35 +1,62 @@
-# This is a basic workflow to help you get started with Actions
-
 name: e2e Test
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  # push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+
   build:
-    # The type of runner that the job will run on
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Install dependencies
+        run: go get .
+      - name: Test with Go
+        run: go test -json > TestResults-${{ matrix.go-version }}.json
+      - name: Upload Go test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Go-results-${{ matrix.go-version }}
+          path: TestResults-${{ matrix.go-version }}.json
+
+  e2e-test:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    env:
+      BUILD_DIR: build/
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version-file: 'go.mod'
-        
+
+      - name: Build
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o ${BUILD_DIR}lambda ./cmd/lambda
+
+      # - name: Copy config
+      #   run: |
+          
+      - name: Create archive
+        run: |
+          cd ${BUILD_DIR} 
+          if [ -f lambda.zip ]; then rm lambda.zip; fi
+		      zip lambda.zip -r . \
+		      cd -
+
       - name: Run e2e test
         run: go test -v -tags="e2e" ./e2e
         env: # Or as an environment variable
