@@ -58,8 +58,8 @@ jobs:
         run: |
           cd ${BUILD_DIR}
           if [ -f lambda.zip ]; then rm lambda.zip; fi
-		      zip lambda.zip -r .
-		      cd -
+          zip lambda.zip -r .
+          cd -
 
       - name: Check for file
         run: stat ${BUILD_DIR}lambda.zip
