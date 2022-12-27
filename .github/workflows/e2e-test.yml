@@ -49,7 +49,7 @@ jobs:
           wget https://github.com/CodeZombieCH/aws-lambda-update-function/releases/download/v0.1/update-linux-amd64
           chmod +x update-linux-amd64
 
-      - name: Update Lambda function
+      - name: Update AWS Lambda function
         run: |
           ./update-linux-amd64 --function-name "$FUNCTION_NAME" --zip-file "${BUILD_DIR}lambda.zip"
         env:
