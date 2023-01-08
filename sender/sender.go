@@ -24,7 +24,7 @@ func NewSender(awsConfig aws.Config) *Sender {
 
 func (s *Sender) SendMessage(source string, destinations []string, data []byte) (*string, error) {
 	input := sesv2.SendEmailInput{
-		FromEmailAddress: aws.String(source),
+		FromEmailAddress: aws.String("foo@example.com"),
 		Destination: &types.Destination{
 			ToAddresses: destinations,
 		},
